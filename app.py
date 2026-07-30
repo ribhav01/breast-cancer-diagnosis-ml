@@ -24,6 +24,38 @@ st.markdown("""
         font-family: 'Segoe UI', -apple-system, sans-serif;
     }
 
+    /* Force readable dark text + pink accent across all native Streamlit widgets */
+    :root, html, body {
+        --primary-color: #c2185b;
+        --text-color: #3a1a2b;
+        --background-color: #fff5f7;
+        --secondary-background-color: #ffe4ec;
+    }
+
+    /* Belt-and-suspenders: directly set text color on the app container so
+       headers, captions, and slider labels are never left on a white/gray
+       default that disappears against the pink background. */
+    [data-testid="stAppViewContainer"] {
+        color: #3a1a2b;
+    }
+    [data-testid="stAppViewContainer"] h1,
+    [data-testid="stAppViewContainer"] h2,
+    [data-testid="stAppViewContainer"] h3,
+    [data-testid="stAppViewContainer"] p,
+    [data-testid="stAppViewContainer"] span,
+    [data-testid="stAppViewContainer"] label {
+        color: #3a1a2b;
+    }
+    [data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] * {
+        color: #7a4a5e !important;
+    }
+
+    /* Keep main content above the ribbon watermark */
+    [data-testid="stAppViewContainer"] > .main {
+        position: relative;
+        z-index: 1;
+    }
+
     /* Soft animated pink gradient background */
     [data-testid="stAppViewContainer"] {
         background: linear-gradient(135deg, #fff5f7 0%, #ffe4ec 25%, #fff0f3 50%, #ffe9ef 75%, #fff5f7 100%);
@@ -52,7 +84,7 @@ st.markdown("""
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 90 C70 60, 40 70, 45 100 C50 130, 85 130, 100 105 C115 130, 150 130, 155 100 C160 70, 130 60, 100 90 Z' fill='none' stroke='%23e8879f' stroke-width='7'/%3E%3Cpath d='M100 105 L75 175 L100 160 L125 175 Z' fill='none' stroke='%23e8879f' stroke-width='7' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-size: contain;
-        opacity: 0.12;
+        opacity: 0.10;
         pointer-events: none;
         z-index: 0;
     }
@@ -101,14 +133,29 @@ st.markdown("""
     }
     div[data-testid="stSlider"]:hover {
         transform: scale(1.015);
-        background: rgba(233, 30, 140, 0.05);
-        box-shadow: 0 4px 14px rgba(233, 30, 140, 0.12);
+        background: rgba(194, 24, 91, 0.07);
+        box-shadow: 0 4px 14px rgba(194, 24, 91, 0.15);
         z-index: 2;
         position: relative;
     }
 
+    /* Slider thumb */
     div[data-testid="stSlider"] [role="slider"] {
-        box-shadow: 0 2px 8px rgba(233, 30, 140, 0.4);
+        background-color: #c2185b !important;
+        box-shadow: 0 2px 8px rgba(194, 24, 91, 0.45);
+    }
+
+    /* Slider filled track */
+    div[data-testid="stSlider"] div[data-baseweb="slider"] > div > div {
+        background: #e8879f !important;
+    }
+
+    /* Slider min/max/current value text */
+    div[data-testid="stSlider"] [data-testid="stTickBarMin"],
+    div[data-testid="stSlider"] [data-testid="stTickBarMax"],
+    div[data-testid="stSlider"] [data-testid="stThumbValue"] {
+        color: #3a1a2b !important;
+        font-weight: 600;
     }
 
     div.stButton > button {
@@ -163,11 +210,15 @@ st.markdown("""
 
     .footer-note {
         text-align: center;
-        color: #888;
+        color: #7a4a5e;
         font-size: 0.85rem;
         margin-top: 2rem;
         padding-top: 1rem;
-        border-top: 1px solid #eee;
+        border-top: 1px solid rgba(194, 24, 91, 0.15);
+    }
+    .footer-note a {
+        color: #c2185b;
+        font-weight: 600;
     }
 
     /* Respect reduced-motion preference */
