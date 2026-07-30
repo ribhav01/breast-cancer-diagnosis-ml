@@ -7,9 +7,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 
-st.set_page_config(page_title="Breast Cancer Diagnosis Predictor")
+st.set_page_config(page_title="Breast Cancer Diagnosis Predictor", page_icon="🧬")
 
-st.title("🔬 Breast Cancer Diagnosis Predictor")
+st.title("Breast Cancer Diagnosis Predictor")
 st.write(
     "This app uses a logistic regression model trained on the Wisconsin Breast "
     "Cancer dataset (569 patient samples) to predict whether a tumor is "
