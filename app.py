@@ -43,20 +43,6 @@ st.markdown("""
         font-size: 1.02rem;
     }
 
-    .card {
-        background: white;
-        border-radius: 14px;
-        padding: 1.5rem 1.7rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-        border: 1px solid rgba(0,0,0,0.04);
-        margin-bottom: 1.2rem;
-        transition: box-shadow 0.25s ease, transform 0.25s ease;
-    }
-    .card:hover {
-        box-shadow: 0 8px 30px rgba(0,0,0,0.10);
-        transform: translateY(-2px);
-    }
-
     .accuracy-badge {
         display: inline-block;
         background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
@@ -185,7 +171,7 @@ def load_model():
 model, scaler, accuracy, stats = load_model()
 
 st.markdown(f"""
-<div class="card">
+<div style="margin-bottom: 1.2rem;">
     <span class="accuracy-badge">✓ Model Test Accuracy: {accuracy:.1%}</span>
 </div>
 """, unsafe_allow_html=True)
@@ -193,7 +179,6 @@ st.markdown(f"""
 # ---------------------------------------------------------
 # User input sliders
 # ---------------------------------------------------------
-st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("📊 Enter Tumor Measurements")
 st.caption("Adjust the sliders below — hover to focus on a measurement.")
 
@@ -214,8 +199,6 @@ for i, feature in enumerate(TOP_FEATURES):
             value=mean_val,
             step=(max_val - min_val) / 100,
         )
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------
 # Prediction
