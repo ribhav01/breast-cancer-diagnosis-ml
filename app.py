@@ -6,21 +6,151 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-
-st.set_page_config(page_title="Breast Cancer Diagnosis Predictor", page_icon="🧬")
-
-st.title("Breast Cancer Diagnosis Predictor")
-st.write(
-    "This app uses a logistic regression model trained on the Wisconsin Breast "
-    "Cancer dataset (569 patient samples) to predict whether a tumor is "
-    "**malignant** or **benign** based on 10 key clinical measurements."
+# ---------------------------------------------------------
+# Page setup
+# ---------------------------------------------------------
+st.set_page_config(
+    page_title="Breast Cancer Diagnosis Predictor",
+    page_icon="🔬",
+    layout="wide",
 )
+
+# ---------------------------------------------------------
+# Custom CSS: cards, shadows, hover zoom, gradient header
+# ---------------------------------------------------------
+st.markdown("""
+<style>
+    html, body, [class*="css"] {
+        font-family: 'Segoe UI', -apple-system, sans-serif;
+    }
+
+    .hero-banner {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        padding: 2.2rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 1.8rem;
+        box-shadow: 0 10px 30px rgba(37, 117, 252, 0.25);
+    }
+    .hero-banner h1 {
+        color: white;
+        margin: 0;
+        font-size: 2.1rem;
+        font-weight: 700;
+    }
+    .hero-banner p {
+        color: rgba(255,255,255,0.9);
+        margin-top: 0.5rem;
+        font-size: 1.02rem;
+    }
+
+    .card {
+        background: white;
+        border-radius: 14px;
+        padding: 1.5rem 1.7rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.04);
+        margin-bottom: 1.2rem;
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .card:hover {
+        box-shadow: 0 8px 30px rgba(0,0,0,0.10);
+        transform: translateY(-2px);
+    }
+
+    .accuracy-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        padding: 0.35rem 1rem;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 14px rgba(56, 239, 125, 0.35);
+    }
+
+    div[data-testid="stSlider"] {
+        padding: 0.9rem 1.1rem;
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    div[data-testid="stSlider"]:hover {
+        transform: scale(1.035);
+        background: rgba(37, 117, 252, 0.05);
+        box-shadow: 0 6px 20px rgba(37, 117, 252, 0.15);
+        z-index: 2;
+        position: relative;
+    }
+
+    div[data-testid="stSlider"] [role="slider"] {
+        box-shadow: 0 2px 8px rgba(37, 117, 252, 0.4);
+    }
+
+    div.stButton > button {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        border: none;
+        padding: 0.7rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        box-shadow: 0 6px 20px rgba(37, 117, 252, 0.35);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    div.stButton > button:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 10px 26px rgba(37, 117, 252, 0.45);
+    }
+
+    .result-benign {
+        background: linear-gradient(135deg, #e6fff5 0%, #d0fbe8 100%);
+        border-left: 6px solid #11998e;
+        border-radius: 12px;
+        padding: 1.4rem 1.7rem;
+        box-shadow: 0 6px 24px rgba(17, 153, 142, 0.18);
+    }
+    .result-malignant {
+        background: linear-gradient(135deg, #fff0f0 0%, #ffe1e1 100%);
+        border-left: 6px solid #e63946;
+        border-radius: 12px;
+        padding: 1.4rem 1.7rem;
+        box-shadow: 0 6px 24px rgba(230, 57, 70, 0.18);
+    }
+    .result-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+    }
+
+    .footer-note {
+        text-align: center;
+        color: #888;
+        font-size: 0.85rem;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------
+# Hero header
+# ---------------------------------------------------------
+st.markdown("""
+<div class="hero-banner">
+    <h1>🔬 Breast Cancer Diagnosis Predictor</h1>
+    <p>A logistic regression model trained on 569 clinical cases, predicting
+    tumor diagnosis from 10 key measurements — with 97.4% test accuracy.</p>
+</div>
+""", unsafe_allow_html=True)
+
 st.warning(
-    "Educational project only — not a medical diagnostic tool. "
+    "⚠️ Educational project only — not a medical diagnostic tool. "
     "Do not use for actual clinical decisions."
 )
 
-
+# ---------------------------------------------------------
+# Load data + train model (cached so it only runs once)
+# ---------------------------------------------------------
 TOP_FEATURES = [
     'worst texture', 'radius error', 'worst symmetry', 'mean concave points',
     'worst concavity', 'area error', 'worst radius', 'worst area',
@@ -48,19 +178,24 @@ def load_model():
     model.fit(X_train_scaled, y_train)
 
     acc = accuracy_score(y_test, model.predict(X_test_scaled))
-
-    # Stats used to set slider ranges/defaults
     stats = df[TOP_FEATURES].describe().loc[['min', 'mean', 'max']].T
 
     return model, scaler, acc, stats
 
 model, scaler, accuracy, stats = load_model()
 
-st.caption(f"Model test accuracy: **{accuracy:.1%}**")
+st.markdown(f"""
+<div class="card">
+    <span class="accuracy-badge">✓ Model Test Accuracy: {accuracy:.1%}</span>
+</div>
+""", unsafe_allow_html=True)
 
-
-st.header("Enter tumor measurements")
-st.write("Adjust the sliders below, or leave at default (average) values.")
+# ---------------------------------------------------------
+# User input sliders
+# ---------------------------------------------------------
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.subheader("📊 Enter Tumor Measurements")
+st.caption("Adjust the sliders below — hover to focus on a measurement.")
 
 col1, col2 = st.columns(2)
 user_input = {}
@@ -80,30 +215,48 @@ for i, feature in enumerate(TOP_FEATURES):
             step=(max_val - min_val) / 100,
         )
 
+st.markdown('</div>', unsafe_allow_html=True)
 
-if st.button("Predict Diagnosis", type="primary"):
+# ---------------------------------------------------------
+# Prediction
+# ---------------------------------------------------------
+predict_clicked = st.button("🔍 Predict Diagnosis", type="primary")
+
+if predict_clicked:
     input_df = pd.DataFrame([user_input])[TOP_FEATURES]
     input_scaled = scaler.transform(input_df)
 
     prediction = model.predict(input_scaled)[0]
     probability = model.predict_proba(input_scaled)[0]
 
-    st.divider()
+    st.write("")
+
     if prediction == 1:
-        st.success(f"### Prediction: Benign")
-        st.write(f"Confidence: {probability[1]:.1%}")
+        st.markdown(f"""
+        <div class="result-benign">
+            <div class="result-title">✅ Prediction: Benign</div>
+            <div>Confidence: <strong>{probability[1]:.1%}</strong></div>
+        </div>
+        """, unsafe_allow_html=True)
     else:
-        st.error(f"### Prediction: Malignant")
-        st.write(f"Confidence: {probability[0]:.1%}")
+        st.markdown(f"""
+        <div class="result-malignant">
+            <div class="result-title">⚠️ Prediction: Malignant</div>
+            <div>Confidence: <strong>{probability[0]:.1%}</strong></div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.caption(
         "Remember: this is a demonstration of a machine learning model, "
         "not a medical diagnosis. Always consult a physician."
     )
 
-st.divider()
-st.markdown(
-    "Built as an independent project exploring machine learning applications "
-    "in healthcare. "
-    "[View source code on GitHub](https://github.com/ribhav01/breast-cancer-diagnosis-ml)"
-)
+# ---------------------------------------------------------
+# Footer
+# ---------------------------------------------------------
+st.markdown("""
+<div class="footer-note">
+    Built as an independent project exploring machine learning applications in healthcare.<br>
+    <a href="https://github.com/ribhav01/breast-cancer-diagnosis-ml" target="_blank">View source code on GitHub</a>
+</div>
+""", unsafe_allow_html=True)
