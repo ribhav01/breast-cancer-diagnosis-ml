@@ -24,12 +24,52 @@ st.markdown("""
         font-family: 'Segoe UI', -apple-system, sans-serif;
     }
 
+    /* Soft animated pink gradient background */
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(135deg, #fff5f7 0%, #ffe4ec 25%, #fff0f3 50%, #ffe9ef 75%, #fff5f7 100%);
+        background-size: 300% 300%;
+        animation: gentleDrift 22s ease infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        [data-testid="stAppViewContainer"] {
+            animation: none;
+        }
+    }
+    @keyframes gentleDrift {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Subtle ribbon watermark, fixed in the corner, non-interactive */
+    [data-testid="stAppViewContainer"]::before {
+        content: "";
+        position: fixed;
+        top: -40px;
+        right: -40px;
+        width: 340px;
+        height: 340px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 90 C70 60, 40 70, 45 100 C50 130, 85 130, 100 105 C115 130, 150 130, 155 100 C160 70, 130 60, 100 90 Z' fill='none' stroke='%23e8879f' stroke-width='7'/%3E%3Cpath d='M100 105 L75 175 L100 160 L125 175 Z' fill='none' stroke='%23e8879f' stroke-width='7' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        opacity: 0.12;
+        pointer-events: none;
+        z-index: 0;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<style>
+
     .hero-banner {
-        background: linear-gradient(135deg, #1a5f7a 0%, #2c88a0 100%);
+        background: linear-gradient(135deg, #d1477a 0%, #f0729a 100%);
         padding: 2.2rem 2rem;
         border-radius: 16px;
         margin-bottom: 1.8rem;
-        box-shadow: 0 8px 24px rgba(26, 95, 122, 0.18);
+        box-shadow: 0 8px 24px rgba(209, 71, 122, 0.2);
+        position: relative;
+        z-index: 1;
     }
     .hero-banner h1 {
         color: white;
@@ -45,13 +85,13 @@ st.markdown("""
 
     .accuracy-badge {
         display: inline-block;
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        background: linear-gradient(135deg, #c2185b 0%, #e91e8c 100%);
         color: white;
         padding: 0.35rem 1rem;
         border-radius: 999px;
         font-weight: 600;
         font-size: 0.95rem;
-        box-shadow: 0 4px 14px rgba(56, 239, 125, 0.35);
+        box-shadow: 0 4px 14px rgba(233, 30, 140, 0.3);
     }
 
     div[data-testid="stSlider"] {
@@ -61,30 +101,30 @@ st.markdown("""
     }
     div[data-testid="stSlider"]:hover {
         transform: scale(1.015);
-        background: rgba(26, 95, 122, 0.05);
-        box-shadow: 0 4px 14px rgba(26, 95, 122, 0.12);
+        background: rgba(233, 30, 140, 0.05);
+        box-shadow: 0 4px 14px rgba(233, 30, 140, 0.12);
         z-index: 2;
         position: relative;
     }
 
     div[data-testid="stSlider"] [role="slider"] {
-        box-shadow: 0 2px 8px rgba(26, 95, 122, 0.4);
+        box-shadow: 0 2px 8px rgba(233, 30, 140, 0.4);
     }
 
     div.stButton > button {
-        background: linear-gradient(135deg, #1a5f7a 0%, #2c88a0 100%);
+        background: linear-gradient(135deg, #c2185b 0%, #e91e8c 100%);
         color: white;
         border: none;
         padding: 0.7rem 2rem;
         border-radius: 10px;
         font-weight: 600;
         font-size: 1.05rem;
-        box-shadow: 0 4px 16px rgba(26, 95, 122, 0.3);
+        box-shadow: 0 4px 16px rgba(233, 30, 140, 0.3);
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     div.stButton > button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(26, 95, 122, 0.4);
+        box-shadow: 0 6px 20px rgba(233, 30, 140, 0.4);
     }
 
     .result-benign {
@@ -141,7 +181,7 @@ st.markdown("""
     /* Visible focus states for keyboard navigation */
     div[data-testid="stSlider"] [role="slider"]:focus-visible,
     div.stButton > button:focus-visible {
-        outline: 3px solid #2c88a0;
+        outline: 3px solid #e91e8c;
         outline-offset: 2px;
     }
 </style>
@@ -152,7 +192,7 @@ st.markdown("""
 # ---------------------------------------------------------
 st.markdown("""
 <div class="hero-banner">
-    <h1>🔬 Breast Cancer Diagnosis Predictor</h1>
+    <h1>🎗️ Breast Cancer Diagnosis Predictor</h1>
     <p>A logistic regression model trained on 569 clinical cases, predicting
     tumor diagnosis from 10 key measurements — with 97.4% test accuracy.</p>
 </div>
