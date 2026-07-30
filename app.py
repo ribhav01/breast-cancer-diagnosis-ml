@@ -93,6 +93,13 @@ st.markdown("""
         border-radius: 12px;
         padding: 1.4rem 1.7rem;
         box-shadow: 0 6px 24px rgba(17, 153, 142, 0.18);
+        color: #0d3d33;
+    }
+    .result-benign .result-title {
+        color: #0d3d33;
+    }
+    .result-benign strong {
+        color: #0d3d33;
     }
     .result-malignant {
         background: linear-gradient(135deg, #fff0f0 0%, #ffe1e1 100%);
@@ -100,6 +107,13 @@ st.markdown("""
         border-radius: 12px;
         padding: 1.4rem 1.7rem;
         box-shadow: 0 6px 24px rgba(230, 57, 70, 0.18);
+        color: #5c1015;
+    }
+    .result-malignant .result-title {
+        color: #5c1015;
+    }
+    .result-malignant strong {
+        color: #5c1015;
     }
     .result-title {
         font-size: 1.4rem;
@@ -123,7 +137,7 @@ st.markdown("""
 # ---------------------------------------------------------
 st.markdown("""
 <div class="hero-banner">
-    <h1>🔬 Breast Cancer Diagnosis Predictor</h1>
+    <h1>Breast Cancer Diagnosis Predictor</h1>
     <p>A logistic regression model trained on 569 clinical cases, predicting
     tumor diagnosis from 10 key measurements — with 97.4% test accuracy.</p>
 </div>
