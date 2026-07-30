@@ -25,11 +25,11 @@ st.markdown("""
     }
 
     .hero-banner {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        background: linear-gradient(135deg, #1a5f7a 0%, #2c88a0 100%);
         padding: 2.2rem 2rem;
         border-radius: 16px;
         margin-bottom: 1.8rem;
-        box-shadow: 0 10px 30px rgba(37, 117, 252, 0.25);
+        box-shadow: 0 8px 24px rgba(26, 95, 122, 0.18);
     }
     .hero-banner h1 {
         color: white;
@@ -60,31 +60,31 @@ st.markdown("""
         transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
     div[data-testid="stSlider"]:hover {
-        transform: scale(1.035);
-        background: rgba(37, 117, 252, 0.05);
-        box-shadow: 0 6px 20px rgba(37, 117, 252, 0.15);
+        transform: scale(1.015);
+        background: rgba(26, 95, 122, 0.05);
+        box-shadow: 0 4px 14px rgba(26, 95, 122, 0.12);
         z-index: 2;
         position: relative;
     }
 
     div[data-testid="stSlider"] [role="slider"] {
-        box-shadow: 0 2px 8px rgba(37, 117, 252, 0.4);
+        box-shadow: 0 2px 8px rgba(26, 95, 122, 0.4);
     }
 
     div.stButton > button {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        background: linear-gradient(135deg, #1a5f7a 0%, #2c88a0 100%);
         color: white;
         border: none;
         padding: 0.7rem 2rem;
         border-radius: 10px;
         font-weight: 600;
         font-size: 1.05rem;
-        box-shadow: 0 6px 20px rgba(37, 117, 252, 0.35);
+        box-shadow: 0 4px 16px rgba(26, 95, 122, 0.3);
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     div.stButton > button:hover {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 10px 26px rgba(37, 117, 252, 0.45);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(26, 95, 122, 0.4);
     }
 
     .result-benign {
@@ -129,6 +129,21 @@ st.markdown("""
         padding-top: 1rem;
         border-top: 1px solid #eee;
     }
+
+    /* Respect reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none !important;
+            animation: none !important;
+        }
+    }
+
+    /* Visible focus states for keyboard navigation */
+    div[data-testid="stSlider"] [role="slider"]:focus-visible,
+    div.stButton > button:focus-visible {
+        outline: 3px solid #2c88a0;
+        outline-offset: 2px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -137,7 +152,7 @@ st.markdown("""
 # ---------------------------------------------------------
 st.markdown("""
 <div class="hero-banner">
-    <h1>Breast Cancer Diagnosis Predictor</h1>
+    <h1>🔬 Breast Cancer Diagnosis Predictor</h1>
     <p>A logistic regression model trained on 569 clinical cases, predicting
     tumor diagnosis from 10 key measurements — with 97.4% test accuracy.</p>
 </div>
