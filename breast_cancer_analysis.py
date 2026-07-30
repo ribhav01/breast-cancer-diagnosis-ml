@@ -17,9 +17,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 
-# ---------------------------------------------------------
-# 1. Load data
-# ---------------------------------------------------------
 data = load_breast_cancer()
 df = pd.DataFrame(data.data, columns=data.feature_names)
 df['target'] = data.target  # 0 = malignant, 1 = benign
@@ -27,9 +24,6 @@ df['target'] = data.target  # 0 = malignant, 1 = benign
 print("Dataset shape:", df.shape)
 print(df['target'].value_counts())
 
-# ---------------------------------------------------------
-# 2. Visualize
-# ---------------------------------------------------------
 plt.figure(figsize=(6, 4))
 sns.countplot(x='target', data=df)
 plt.xticks([0, 1], ['Malignant', 'Benign'])
@@ -43,9 +37,7 @@ plt.title('Feature Correlation Heatmap')
 plt.savefig('correlation_heatmap.png', bbox_inches='tight')
 plt.close()
 
-# ---------------------------------------------------------
-# 3. Train / test split + scaling
-# ---------------------------------------------------------
+
 X = df.drop('target', axis=1)
 y = df['target']
 
@@ -57,9 +49,7 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# ---------------------------------------------------------
-# 4. Train model
-# ---------------------------------------------------------
+
 model = LogisticRegression(max_iter=5000)
 model.fit(X_train_scaled, y_train)
 
@@ -69,9 +59,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"\nAccuracy: {accuracy:.2%}")
 print(classification_report(y_test, y_pred, target_names=['Malignant', 'Benign']))
 
-# ---------------------------------------------------------
-# 5. Feature importance
-# ---------------------------------------------------------
+
 coefs = pd.Series(model.coef_[0], index=X.columns).sort_values(key=abs, ascending=False)
 print("\nTop 10 most predictive features:")
 print(coefs.head(10))
