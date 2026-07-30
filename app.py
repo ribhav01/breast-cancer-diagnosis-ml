@@ -6,10 +6,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-# ---------------------------------------------------------
-# Page setup
-# ---------------------------------------------------------
-st.set_page_config(page_title="Breast Cancer Diagnosis Predictor", page_icon="🔬")
+
+st.set_page_config(page_title="Breast Cancer Diagnosis Predictor",)
 
 st.title("🔬 Breast Cancer Diagnosis Predictor")
 st.write(
@@ -18,13 +16,11 @@ st.write(
     "**malignant** or **benign** based on 10 key clinical measurements."
 )
 st.warning(
-    "⚠️ Educational project only — not a medical diagnostic tool. "
+    "Educational project only — not a medical diagnostic tool. "
     "Do not use for actual clinical decisions."
 )
 
-# ---------------------------------------------------------
-# Load data + train model (cached so it only runs once)
-# ---------------------------------------------------------
+
 TOP_FEATURES = [
     'worst texture', 'radius error', 'worst symmetry', 'mean concave points',
     'worst concavity', 'area error', 'worst radius', 'worst area',
@@ -62,9 +58,7 @@ model, scaler, accuracy, stats = load_model()
 
 st.caption(f"Model test accuracy: **{accuracy:.1%}**")
 
-# ---------------------------------------------------------
-# User input sliders
-# ---------------------------------------------------------
+
 st.header("Enter tumor measurements")
 st.write("Adjust the sliders below, or leave at default (average) values.")
 
@@ -86,9 +80,7 @@ for i, feature in enumerate(TOP_FEATURES):
             step=(max_val - min_val) / 100,
         )
 
-# ---------------------------------------------------------
-# Prediction
-# ---------------------------------------------------------
+
 if st.button("Predict Diagnosis", type="primary"):
     input_df = pd.DataFrame([user_input])[TOP_FEATURES]
     input_scaled = scaler.transform(input_df)
