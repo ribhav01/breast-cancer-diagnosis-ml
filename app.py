@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 
-st.set_page_config(page_title="Breast Cancer Diagnosis Predictor",)
+st.set_page_config(page_title="Breast Cancer Diagnosis Predictor")
 
 st.title("🔬 Breast Cancer Diagnosis Predictor")
 st.write(
